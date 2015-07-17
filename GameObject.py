@@ -7,35 +7,42 @@ class GameObject (object):
     _registry = {}
 
     @staticmethod
-    def get(name):
-        if name in GameObject._registry:
-            return GameObject._registry[name]
+    def get(_id):
+        if _id in GameObject._registry:
+            return GameObject._registry[id]
 
     @staticmethod
     def updateAll(t, dt):
         for obj in GameObject._registry.values():
             obj.update(t, dt)
 
-    def __init__(self, name, pos, depth=0, components=[]):
+    def __init__(self, name="GameObject", components=[], *args, **kwargs):
         self.name = name
         self.components = []
         self.addComponents(components)
 
         # Register Object
-        GameObject._registry[name] = self
+        GameObject._registry[id(self)] = self
 
     def parentTo(self, parent):
         """ GameObj wrapper for transform's parent method. """
         self.transform.parentTo(parent)
 
-    def addComponent(self, component):
+    def addCompontent(self, component):
         component.claim(self)
-        self.components.append(component)
+        self.components.append(self)
+
+        component.checkDependencies()
         component.awake()
 
     def addComponents(self, components):
         for component in components:
-            self.addComponent(component)
+            component.claim(self)
+            self.components.append(component)
+
+        for component in self.components:
+            component.checkDependencies()
+            component.awake()
 
     def getComponent(self, componentType):
         for component in self.components:
@@ -47,4 +54,10 @@ class GameObject (object):
             component.update(t, dt)
 
     def __str__(self):
-        return self.name
+        return "{} (id: {})".format(self.name, id(self))
+
+
+if __name__ == "__main__":
+    from Transform import Transform
+    g = GameObject(components=[Transform()])
+    print(g.getComponent(Transform))
