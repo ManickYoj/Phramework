@@ -1,8 +1,4 @@
-from abc import ABCMeta
-
-
 class GameObject (object):
-    __metaclass__ = ABCMeta
 
     _registry = {}
 

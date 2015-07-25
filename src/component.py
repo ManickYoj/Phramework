@@ -1,8 +1,10 @@
 from Exceptions import DependencyException
+from abc import ABCMeta
 
 
 class Component (object):
     """ Superclass for all component objects. """
+    __metaclass__ = ABCMeta
 
     def __init__(self, name, owner=None, dependencies=[]):
         self.name = name
@@ -35,5 +37,5 @@ class Component (object):
 
     def __str__(self):
         if not self.owner:
-            return "Unowned {}".format(self.name)
+            return "Unowned {} (id: {})".format(self.name, id(self))
         return self.name + " of " + str(self.owner)
