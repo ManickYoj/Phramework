@@ -3,7 +3,7 @@ import operator
 from numbers import Number
 
 
-class Vector:
+class Vector (object):
     @staticmethod
     def magnitude(vec):
         return sum([x**2 for x in vec]) ** .5

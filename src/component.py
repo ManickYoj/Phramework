@@ -1,10 +1,8 @@
 from Exceptions import DependencyException
-from abc import ABCMeta
 
 
 class Component (object):
     """ Superclass for all component objects. """
-    __metaclass__ = ABCMeta
 
     def __init__(self, name, owner=None, dependencies=[]):
         self.name = name
